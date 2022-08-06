@@ -13,7 +13,7 @@ var main = (to_mail, sub, msg) => {
         port: 465,
         auth: {
             user: 'vikrant.kumar@aryavratinfotech.com',
-            pass: 'Vikrant@12345'
+            pass: ''
         }
     });
 
