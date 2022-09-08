@@ -6,6 +6,9 @@ const auth = async(req, res, next) => {
         console.log("auth bhai");
         const token = req.cookies.jwt;
         console.log(token);
+        if (token == undefined) {
+            return res.send({ status: 'error', message: 'Unauthroized user' });
+        }
         const verifyUser = jwt.verify(token, process.env.SECRETE_KEY);
         console.log(verifyUser);
         const userr = await user.findOne({ userName: verifyUser.userName });
@@ -14,7 +17,7 @@ const auth = async(req, res, next) => {
         req.userr = userr;
         next();
     } catch (error) {
-        res.status(400).send(error);
+        return error;
     }
 }
 
