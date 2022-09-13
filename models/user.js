@@ -33,14 +33,14 @@ const userSchema = new mongoose.Schema({
 });
 
 
-userSchema.methods.generateAuthToken = async function(res, req) {
-    try {
-        const token = jwt.sign({ userName: this.userName.toString() }, process.env.SECRETE_KEY);
-        // this.tokens = this.tokens.concat({ token: token });
-        // await this.save();
-        return token;
-    } catch (error) {
-        res.send({ message: error.message });
-    }
+// userSchema.methods.generateAuthToken = async function(res, req) {
+//     try {
+//         const token = jwt.sign({ userName: this.userName.toString() }, process.env.SECRETE_KEY);
+//         // this.tokens = this.tokens.concat({ token: token });
+//         // await this.save();
+//         return token;
+//     } catch (error) {
+//         res.send({ message: error.message });
+//     }
 }
 module.exports = new mongoose.model('user', userSchema);
