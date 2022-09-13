@@ -26,15 +26,15 @@ module.exports.registration = async function(req, res) {
                 password: hash,
                 'metaData.createdAt': MetaData.dateInfo()
             });
-            const token = await returnData.generateAuthToken();
-            console.log("token part" + token);
-            res.cookie("jwt", token, {
+            const jwtToken = jwt.sign({ sub: returnData.userName, userName: returnData.userName }, process.env.SECRETE_KEY);
+            console.log("token part" + jwtToken);
+            res.cookie("jwt", jwtToken, {
                 expires: new Date(Date.now() + 10000),
                 httpOnly: true
             });
 
             const userData = await returnData.save();
-            return res.send({ status: "success", message: "Registration successfully done..!!!", data: { userData, token } })
+            return res.send({ status: "success", message: "Registration successfully done..!!!", data: { userData, jwtToken } })
         }
     } catch (error) {
         return res.send({ status: "error", message: error.message })
@@ -51,10 +51,10 @@ module.exports.login = async function(req, res) {
                 console.log(data);
                 const isMatch = await bcrypt.compareSync(pass1, data.password);
                 console.log("iiiii");
-                const token = await data.generateAuthToken();
-                console.log("token part" + token);
+                  const jwtToken = jwt.sign({ sub: data.userName, userName: data.userName }, process.env.SECRETE_KEY);
+                console.log("token part" + jwtToken);
 
-                res.cookie("jwt", token, {
+                res.cookie("jwt", jwtToken, {
                     expires: new Date(Date.now() + 300000),
                     // secure:true,
                     httpOnly: true
@@ -62,7 +62,7 @@ module.exports.login = async function(req, res) {
                 console.log(isMatch, 'isMatch');
                 if (isMatch) {
                     console.log("after match");
-                    res.send({ status: 'success', message: "Login Successfully...!!!", data: { data, token } });
+                    res.send({ status: 'success', message: "Login Successfully...!!!", data: { data, jwtToken } });
                 } else {
                     console.log("hit");
                     res.send({ status: 'error', message: "Email and Password Invalid...88!!!" });
