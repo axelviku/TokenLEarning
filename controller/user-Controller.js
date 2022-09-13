@@ -26,6 +26,7 @@ module.exports.registration = async function(req, res) {
                 password: hash,
                 'metaData.createdAt': MetaData.dateInfo()
             });
+//               const jwtToken = await returnData.generateAuthToken();
             const jwtToken = jwt.sign({ sub: returnData.userName, userName: returnData.userName }, process.env.SECRETE_KEY);
             console.log("token part" + jwtToken);
             res.cookie("jwt", jwtToken, {
@@ -51,6 +52,7 @@ module.exports.login = async function(req, res) {
                 console.log(data);
                 const isMatch = await bcrypt.compareSync(pass1, data.password);
                 console.log("iiiii");
+//                 const jwtToken = await data.generateAuthToken();
                   const jwtToken = jwt.sign({ sub: data.userName, userName: data.userName }, process.env.SECRETE_KEY);
                 console.log("token part" + jwtToken);
 
